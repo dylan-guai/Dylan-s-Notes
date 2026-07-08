@@ -1,0 +1,96 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* ── Design tokens (Part 6) ──────────────────────────────────────────────
+   Minimalist, typography-forward, calm. Near-black ink, muted meta,
+   hairline borders, white ground. One family for reading (serif), one for
+   chrome (sans). No accent, no gradients, no shadows. */
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-serif: var(--font-newsreader), ui-serif, Georgia, Cambria,
+    "Times New Roman", serif;
+
+  --color-ink: #1a1a1a;
+  --color-muted: #6b7280;
+  --color-hairline: #ececec;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: #ffffff;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 18px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ── Reading prose — the backbone of the experience ──────────────────────
+   Serif body, comfortable measure, real paragraph spacing, understated
+   links, headings and quotes that breathe. */
+.prose {
+  --tw-prose-body: #1a1a1a;
+  --tw-prose-headings: #1a1a1a;
+  --tw-prose-links: #1a1a1a;
+  --tw-prose-bold: #1a1a1a;
+  --tw-prose-quotes: #4b5563;
+  --tw-prose-quote-borders: #ececec;
+  --tw-prose-hr: #ececec;
+  --tw-prose-bullets: #b8bcc4;
+  --tw-prose-counters: #6b7280;
+  --tw-prose-code: #1a1a1a;
+  --tw-prose-pre-bg: #f7f7f6;
+  --tw-prose-pre-code: #1a1a1a;
+
+  font-family: var(--font-serif);
+  font-size: 1.1875rem; /* ~19px */
+  line-height: 1.75;
+}
+
+.prose :where(h1, h2, h3, h4) {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.prose :where(h2) {
+  margin-top: 2.2em;
+  margin-bottom: 0.7em;
+  font-size: 1.35em;
+}
+
+.prose :where(h3) {
+  margin-top: 1.8em;
+  font-size: 1.15em;
+}
+
+.prose :where(a) {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  font-weight: inherit;
+}
+
+.prose :where(a):hover {
+  text-decoration-thickness: 2px;
+}
+
+.prose :where(blockquote) {
+  font-style: italic;
+  font-weight: 400;
+  border-left-width: 2px;
+}
+
+.prose :where(img) {
+  border-radius: 2px;
+}
