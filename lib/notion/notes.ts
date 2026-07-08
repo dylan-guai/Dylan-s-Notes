@@ -19,6 +19,7 @@ function mapNote(page: any): Note {
     id: page.id,
     title: readTitle(props, noteProps.title) || "Untitled",
     slug: readRichText(props, noteProps.slug),
+    type: readSelect(props, noteProps.type),
     series: readSelect(props, noteProps.series),
     order: readNumber(props, noteProps.order),
     published: readDate(props, noteProps.published),
@@ -27,11 +28,26 @@ function mapNote(page: any): Note {
   };
 }
 
-/** All Published notes, newest first. Notes without a slug are skipped. */
+/** All Published notes (any Type), newest first. Notes without a slug are skipped. */
 export const getPublishedNotes = cache(async (): Promise<Note[]> => {
   const pages = await queryDatabase({
     database_id: notionDatabaseIds.notes,
     filter: { property: noteProps.status, select: { equals: PUBLISHED } },
+    sorts: [{ property: noteProps.published, direction: "descending" }],
+  });
+  return pages.map(mapNote).filter((n) => n.slug.length > 0);
+});
+
+/** Published notes of one Type (e.g. NOTE_TYPES.research), newest first. */
+export const getNotesByType = cache(async (type: string): Promise<Note[]> => {
+  const pages = await queryDatabase({
+    database_id: notionDatabaseIds.notes,
+    filter: {
+      and: [
+        { property: noteProps.status, select: { equals: PUBLISHED } },
+        { property: noteProps.type, select: { equals: type } },
+      ],
+    },
     sorts: [{ property: noteProps.published, direction: "descending" }],
   });
   return pages.map(mapNote).filter((n) => n.slug.length > 0);

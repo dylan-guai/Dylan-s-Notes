@@ -21,7 +21,6 @@ const notion = new Client({ auth: token, notionVersion: "2022-06-28" });
 const databases = {
   Notes: process.env.NOTION_DB_NOTES,
   Reading: process.env.NOTION_DB_READING,
-  Life: process.env.NOTION_DB_LIFE,
 };
 
 let ok = true;

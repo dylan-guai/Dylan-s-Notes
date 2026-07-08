@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ revalidated: true, path, now: Date.now() });
   }
 
-  for (const p of ["/", "/notes", "/reading", "/life"]) {
+  for (const p of ["/", "/research", "/internships", "/fieldnotes", "/reading"]) {
     revalidatePath(p);
   }
   // Revalidate every note reading page.

@@ -19,11 +19,13 @@ export default function AboutPage() {
           backs.
         </p>
         <p>
-          This site is where I publish independent sector research &mdash; a
-          series on physical &amp; embodied AI, read through one recurring lens,
-          the demo-to-deployable gap &mdash; alongside a{" "}
-          <a href="/reading">reading library</a> and a little of{" "}
-          <a href="/life">life</a> outside the work.
+          This site is where I publish independent{" "}
+          <a href="/research">research</a> &mdash; a series on physical &amp;
+          embodied AI, read through one recurring lens, the demo-to-deployable
+          gap &mdash; alongside notes from my{" "}
+          <a href="/internships">internships</a>, a few{" "}
+          <a href="/fieldnotes">fieldnotes</a> from life outside the work, and a{" "}
+          <a href="/reading">reading library</a>.
         </p>
         <p>Say hello:</p>
         <ul>

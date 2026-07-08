@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getPublishedNotes } from "@/lib/notion";
-import { formatDate } from "@/lib/format";
+import { NoteList } from "@/components/NoteList";
 import { Empty } from "@/components/Empty";
 
 export const revalidate = 60;
@@ -14,10 +14,10 @@ export default async function HomePage() {
         <h1 className="font-serif text-2xl font-semibold tracking-tight">
           Dylan&rsquo;s Notes
         </h1>
-        <p className="max-w-[46ch] text-muted">
+        <p className="max-w-[48ch] text-muted">
           Independent research on physical &amp; embodied AI, read through one
-          recurring lens — the demo-to-deployable gap. Plus a reading library
-          and a little life.
+          recurring lens — the demo-to-deployable gap — alongside notes from the
+          field and a reading library.
         </p>
       </section>
 
@@ -28,35 +28,22 @@ export default async function HomePage() {
         {notes.length === 0 ? (
           <Empty>No notes published yet.</Empty>
         ) : (
-          <ul className="space-y-7">
-            {notes.map((note) => (
-              <li key={note.id}>
-                <Link
-                  href={`/notes/${note.slug}`}
-                  className="group block no-underline"
-                >
-                  <div className="flex items-baseline justify-between gap-4">
-                    <span className="font-serif text-lg text-ink decoration-1 underline-offset-4 group-hover:underline">
-                      {note.title}
-                    </span>
-                    <span className="shrink-0 text-sm text-muted">
-                      {formatDate(note.published)}
-                    </span>
-                  </div>
-                  {note.excerpt && (
-                    <p className="mt-1 text-muted">{note.excerpt}</p>
-                  )}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <NoteList notes={notes} showType />
         )}
-        <Link
-          href="/notes"
-          className="inline-block text-sm text-muted no-underline transition-colors hover:text-ink"
-        >
-          All notes &rarr;
-        </Link>
+        <nav className="flex flex-wrap gap-x-5 gap-y-1 text-sm text-muted">
+          <Link href="/research" className="no-underline hover:text-ink">
+            Research &rarr;
+          </Link>
+          <Link href="/internships" className="no-underline hover:text-ink">
+            Internships &rarr;
+          </Link>
+          <Link href="/fieldnotes" className="no-underline hover:text-ink">
+            Fieldnotes &rarr;
+          </Link>
+          <Link href="/reading" className="no-underline hover:text-ink">
+            Reading &rarr;
+          </Link>
+        </nav>
       </section>
     </div>
   );

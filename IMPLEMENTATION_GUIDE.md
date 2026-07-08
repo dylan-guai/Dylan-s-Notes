@@ -73,6 +73,15 @@ REVALIDATE_SECRET=some-long-random-string
 
 ## Part 4 — The Notion content model (set this up FIRST)  **[persist → CLAUDE.md]**
 
+> **Update (current model).** After the initial build, the content model was
+> consolidated: instead of separate Notes and Life databases, **all written
+> content lives in one "Dylan's Notes" database**, split by a **`Type`** select
+> — `Research Notes`, `Internships`, `Fieldnote`. The Life database was deleted
+> (Fieldnotes replaces it). Reading still maps to the existing Library. The
+> canonical schema now lives in `CLAUDE.md` and `lib/notion/config.ts`; sections
+> 4.1–4.3 below are the *original* plan, kept for history. See "Implementation
+> notes" at the bottom for what shipped.
+
 Before writing any app code, create three databases under the shared parent page. Claude Code can create them via the Notion API (`notion.databases.create`, given the parent page ID and the schemas below), or Dylan can create them in the Notion UI from these schemas. **After creation, record each database ID in `.env` and in `lib/notion/config.ts`, and mirror the schema into `CLAUDE.md`.**
 
 For the **Reading** database, prefer connecting Dylan's *existing* library database: retrieve its schema via the API (`notion.databases.retrieve`), then map its real property names in `lib/notion/config.ts` rather than forcing a rename.
@@ -233,6 +242,14 @@ A live, minimalist site on a custom domain where: home lists recent notes; each 
 
 Deviations and decisions made during the build, for the record:
 
+- **One content database, split by `Type`.** All written content lives in the
+  "Dylan's Notes" database (`2a666526…`, source `312e64ad…`) with a `Type` select
+  — `Research Notes` (industry landscaping), `Internships` (current work),
+  `Fieldnote` (extracurriculars). The originally-planned separate **Life**
+  database was created then **deleted**; Fieldnotes replaces it. Site sections:
+  `/research` (grouped by Series), `/internships`, `/fieldnotes`; every note
+  reads at `/notes/<slug>`. The `Type` literals live in `lib/notion/config.ts` →
+  `NOTE_TYPES`.
 - **Reading maps to Dylan's existing "Library"** (`a6845e59…`) by its real schema
   (`Author`, `Domain` multi-select as "shelf", `Approach` select, `Read`/`To Get`
   checkboxes). Status is **derived** from the checkboxes since there's no Status
@@ -244,7 +261,7 @@ Deviations and decisions made during the build, for the record:
 - **Resilience:** the data layer paginates, is wrapped in React `cache()`, and
   never throws — it returns empty results when Notion is unconfigured or
   unreachable, so the site builds and renders empty states before secrets exist.
-- **Databases created + seeded** (Research Notes, Life) with starter content; see
-  `CLAUDE.md` for IDs. The one step a Claude session can't do is mint the
-  internal integration token and share the pages — that's Dylan's, and it's in
-  the README + CLAUDE.md handover.
+- **Content DB seeded** with two starter Research Notes; see `CLAUDE.md` for IDs.
+  The one step a Claude session can't do is mint the internal integration token
+  and share the databases — that's Dylan's, and it's in the README + CLAUDE.md
+  handover.

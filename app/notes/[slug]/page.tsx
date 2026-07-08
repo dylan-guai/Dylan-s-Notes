@@ -5,6 +5,7 @@ import {
   getPublishedNotes,
   getNoteBySlug,
   renderNote,
+  NOTE_TYPES,
 } from "@/lib/notion";
 import { formatDate } from "@/lib/format";
 import { Markdown } from "@/components/Markdown";
@@ -30,6 +31,18 @@ export async function generateMetadata({
   };
 }
 
+/** Where the "← back" link points, based on the note's Type. */
+function sectionFor(type: string | null): { href: string; label: string } {
+  switch (type) {
+    case NOTE_TYPES.internships:
+      return { href: "/internships", label: "Internships" };
+    case NOTE_TYPES.fieldnote:
+      return { href: "/fieldnotes", label: "Fieldnotes" };
+    default:
+      return { href: "/research", label: "Research" };
+  }
+}
+
 export default async function NotePage({
   params,
 }: {
@@ -40,6 +53,7 @@ export default async function NotePage({
   if (!note) notFound();
 
   const markdown = await renderNote(note.id);
+  const back = sectionFor(note.type);
   const meta = [formatDate(note.published), note.series]
     .filter(Boolean)
     .join(" · ");
@@ -47,10 +61,10 @@ export default async function NotePage({
   return (
     <article className="mx-auto max-w-[680px]">
       <Link
-        href="/notes"
+        href={back.href}
         className="text-sm text-muted no-underline transition-colors hover:text-ink"
       >
-        &larr; Notes
+        &larr; {back.label}
       </Link>
 
       <h1 className="mt-6 font-serif text-3xl font-semibold leading-tight tracking-tight">
