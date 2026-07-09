@@ -5,22 +5,22 @@
  * database IDs and the mapping from our logical field names to Notion's literal
  * property labels live here, in version control — not in one session's context.
  *
- * To point a section at a different Notion database, or to rename a property in
- * Notion, edit the right-hand side of the relevant map. The Reading map targets
- * Dylan's existing "Library" database, so it uses that database's real property
- * names (Author / Domain / Approach / Read / To Get) rather than forcing a
- * rename.
+ * TWO source databases (both under the "26" hub):
+ *   1. "Dylan's Notes" (NOTION_DB_CONTENT) — all long-form entries, split by a
+ *      `Type` select: Research Notes / Internships / Fieldnotes.
+ *   2. "Library"        (NOTION_DB_LIBRARY) — the existing reading list. Books
+ *      render on the site only when the `Publish` checkbox is ticked.
  */
 
 export const notionDatabaseIds = {
-  notes: process.env.NOTION_DB_NOTES ?? "",
-  reading: process.env.NOTION_DB_READING ?? "",
-  life: process.env.NOTION_DB_LIFE ?? "",
+  content: process.env.NOTION_DB_CONTENT ?? "",
+  library: process.env.NOTION_DB_LIBRARY ?? "",
 } as const;
 
-/** Research notes — NOTION_DB_NOTES (created for this site). */
-export const noteProps = {
+/** "Dylan's Notes" content DB — one row = one entry; `Type` picks the section. */
+export const entryProps = {
   title: "Title",
+  type: "Type", // Research Notes / Internships / Fieldnotes
   slug: "Slug",
   status: "Status",
   published: "Published",
@@ -30,40 +30,33 @@ export const noteProps = {
   tags: "Tags",
 } as const;
 
+/** The three content types — exact literal values of the Notion `Type` select. */
+export const NOTE_TYPES = {
+  research: "Research Notes",
+  internships: "Internships",
+  fieldnotes: "Fieldnotes",
+} as const;
+
+export type NoteType = (typeof NOTE_TYPES)[keyof typeof NOTE_TYPES];
+
 /**
- * Reading library — NOTION_DB_READING, mapped onto Dylan's existing "Library".
- * Status is derived from the two checkboxes (there is no Status select):
- *   Read = true  -> "Read"
- *   To Get = true -> "To read"
- *   otherwise     -> "Reading"
- * takeaway / rating / link / finished are OPTIONAL — they resolve only if such
- * properties exist on the database, and are silently ignored otherwise. Add
- * them to the Library and they light up with no code change.
+ * Reading library — mapped onto Dylan's existing "Library" database by its real
+ * schema. `Publish` is the public gate (private by default — nothing renders
+ * until it is checked); `Takeaway` is the one-line note shown on /reading.
+ * The Library has no Status select, Rating, Finished date, or Link URL.
  */
-export const readingProps = {
+export const libraryProps = {
   title: "Title",
   author: "Author",
-  domain: "Domain", // multi-select, shown as the "shelf"
-  approach: "Approach", // select
+  domain: "Domain", // multi-select — the "shelf" the /reading page groups by
+  approach: "Approach", // select — reading depth
   read: "Read", // checkbox
   toGet: "To Get", // checkbox
-  takeaway: "Takeaway", // optional rich text
-  rating: "Rating", // optional number or select
-  link: "Link", // optional url
-  finished: "Finished", // optional date
+  publish: "Publish", // checkbox — public gate
+  takeaway: "Takeaway", // rich text — one-liner shown publicly
 } as const;
 
-/** Life / extracurriculars — NOTION_DB_LIFE (created for this site). */
-export const lifeProps = {
-  title: "Title",
-  type: "Type",
-  date: "Date",
-  place: "Place",
-  summary: "Summary",
-  status: "Status",
-} as const;
-
-/** Only rows with Status = Published ever render on the site. */
+/** Content entries render only when Status = Published. */
 export const PUBLISHED = "Published";
 
 /** ISR interval (seconds) for content pages. */

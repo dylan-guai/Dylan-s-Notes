@@ -1,12 +1,19 @@
 import Link from "next/link";
-import { getPublishedNotes } from "@/lib/notion";
-import { formatDate } from "@/lib/format";
+import { getRecentEntries } from "@/lib/notion";
+import { EntryList } from "@/components/EntryList";
 import { Empty } from "@/components/Empty";
 
 export const revalidate = 60;
 
+const sections = [
+  { href: "/notes", label: "Research" },
+  { href: "/internships", label: "Internships" },
+  { href: "/fieldnotes", label: "Fieldnotes" },
+  { href: "/reading", label: "Reading" },
+];
+
 export default async function HomePage() {
-  const notes = (await getPublishedNotes()).slice(0, 8);
+  const entries = await getRecentEntries(8);
 
   return (
     <div className="space-y-14">
@@ -14,10 +21,10 @@ export default async function HomePage() {
         <h1 className="font-serif text-2xl font-semibold tracking-tight">
           Dylan&rsquo;s Notes
         </h1>
-        <p className="max-w-[46ch] text-muted">
+        <p className="max-w-[48ch] text-muted">
           Independent research on physical &amp; embodied AI, read through one
-          recurring lens — the demo-to-deployable gap. Plus a reading library
-          and a little life.
+          recurring lens — the demo-to-deployable gap — alongside notes from the
+          field and a reading library.
         </p>
       </section>
 
@@ -25,38 +32,18 @@ export default async function HomePage() {
         <h2 className="text-xs font-medium uppercase tracking-widest text-muted">
           Recent writing
         </h2>
-        {notes.length === 0 ? (
-          <Empty>No notes published yet.</Empty>
+        {entries.length === 0 ? (
+          <Empty>No entries published yet.</Empty>
         ) : (
-          <ul className="space-y-7">
-            {notes.map((note) => (
-              <li key={note.id}>
-                <Link
-                  href={`/notes/${note.slug}`}
-                  className="group block no-underline"
-                >
-                  <div className="flex items-baseline justify-between gap-4">
-                    <span className="font-serif text-lg text-ink decoration-1 underline-offset-4 group-hover:underline">
-                      {note.title}
-                    </span>
-                    <span className="shrink-0 text-sm text-muted">
-                      {formatDate(note.published)}
-                    </span>
-                  </div>
-                  {note.excerpt && (
-                    <p className="mt-1 text-muted">{note.excerpt}</p>
-                  )}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <EntryList entries={entries} showType />
         )}
-        <Link
-          href="/notes"
-          className="inline-block text-sm text-muted no-underline transition-colors hover:text-ink"
-        >
-          All notes &rarr;
-        </Link>
+        <nav className="flex flex-wrap gap-x-5 gap-y-1 text-sm text-muted">
+          {sections.map((s) => (
+            <Link key={s.href} href={s.href} className="no-underline hover:text-ink">
+              {s.label} &rarr;
+            </Link>
+          ))}
+        </nav>
       </section>
     </div>
   );
