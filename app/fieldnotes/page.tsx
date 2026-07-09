@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { getNotesByType, NOTE_TYPES } from "@/lib/notion";
+import { getFieldnotes } from "@/lib/notion";
 import { Section } from "@/components/Section";
-import { NoteList } from "@/components/NoteList";
+import { EntryList } from "@/components/EntryList";
 import { Empty } from "@/components/Empty";
 
 export const revalidate = 60;
@@ -12,17 +12,17 @@ export const metadata: Metadata = {
 };
 
 export default async function FieldnotesPage() {
-  const notes = await getNotesByType(NOTE_TYPES.fieldnote);
+  const entries = await getFieldnotes();
 
   return (
     <Section
       title="Fieldnotes"
       description="Life outside the work — travel, hobbies, volunteering, and what matters to me."
     >
-      {notes.length === 0 ? (
+      {entries.length === 0 ? (
         <Empty>Nothing published here yet.</Empty>
       ) : (
-        <NoteList notes={notes} />
+        <EntryList entries={entries} />
       )}
     </Section>
   );

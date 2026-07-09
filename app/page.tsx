@@ -1,12 +1,19 @@
 import Link from "next/link";
-import { getPublishedNotes } from "@/lib/notion";
-import { NoteList } from "@/components/NoteList";
+import { getRecentEntries } from "@/lib/notion";
+import { EntryList } from "@/components/EntryList";
 import { Empty } from "@/components/Empty";
 
 export const revalidate = 60;
 
+const sections = [
+  { href: "/notes", label: "Research" },
+  { href: "/internships", label: "Internships" },
+  { href: "/fieldnotes", label: "Fieldnotes" },
+  { href: "/reading", label: "Reading" },
+];
+
 export default async function HomePage() {
-  const notes = (await getPublishedNotes()).slice(0, 8);
+  const entries = await getRecentEntries(8);
 
   return (
     <div className="space-y-14">
@@ -25,24 +32,17 @@ export default async function HomePage() {
         <h2 className="text-xs font-medium uppercase tracking-widest text-muted">
           Recent writing
         </h2>
-        {notes.length === 0 ? (
-          <Empty>No notes published yet.</Empty>
+        {entries.length === 0 ? (
+          <Empty>No entries published yet.</Empty>
         ) : (
-          <NoteList notes={notes} showType />
+          <EntryList entries={entries} showType />
         )}
         <nav className="flex flex-wrap gap-x-5 gap-y-1 text-sm text-muted">
-          <Link href="/research" className="no-underline hover:text-ink">
-            Research &rarr;
-          </Link>
-          <Link href="/internships" className="no-underline hover:text-ink">
-            Internships &rarr;
-          </Link>
-          <Link href="/fieldnotes" className="no-underline hover:text-ink">
-            Fieldnotes &rarr;
-          </Link>
-          <Link href="/reading" className="no-underline hover:text-ink">
-            Reading &rarr;
-          </Link>
+          {sections.map((s) => (
+            <Link key={s.href} href={s.href} className="no-underline hover:text-ink">
+              {s.label} &rarr;
+            </Link>
+          ))}
         </nav>
       </section>
     </div>

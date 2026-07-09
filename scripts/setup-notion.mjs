@@ -7,7 +7,7 @@
  *     node --env-file=.env.local scripts/setup-notion.mjs
  *
  * It prints the new database ID; copy it into .env.local and Vercel as
- * NOTION_DB_NOTES. (Reading maps to your existing "Library" — untouched here.)
+ * NOTION_DB_CONTENT. (Reading maps to your existing "Library" — untouched here.)
  */
 import { Client } from "@notionhq/client";
 
@@ -34,7 +34,7 @@ const db = await notion.databases.create({
         options: [
           { name: "Research Notes", color: "gray" },
           { name: "Internships", color: "green" },
-          { name: "Fieldnote", color: "yellow" },
+          { name: "Fieldnotes", color: "yellow" },
         ],
       },
     },
@@ -63,5 +63,5 @@ const db = await notion.databases.create({
   },
 });
 
-console.log(`NOTION_DB_NOTES=${db.id.replace(/-/g, "")}`);
+console.log(`NOTION_DB_CONTENT=${db.id.replace(/-/g, "")}`);
 console.log("Done. Copy the ID above into .env.local and Vercel.");

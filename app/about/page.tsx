@@ -20,7 +20,7 @@ export default function AboutPage() {
         </p>
         <p>
           This site is where I publish independent{" "}
-          <a href="/research">research</a> &mdash; a series on physical &amp;
+          <a href="/notes">research</a> &mdash; a series on physical &amp;
           embodied AI, read through one recurring lens, the demo-to-deployable
           gap &mdash; alongside notes from my{" "}
           <a href="/internships">internships</a>, a few{" "}

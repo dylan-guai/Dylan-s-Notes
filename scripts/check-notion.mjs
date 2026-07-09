@@ -19,8 +19,8 @@ if (!token) {
 const notion = new Client({ auth: token, notionVersion: "2022-06-28" });
 
 const databases = {
-  Notes: process.env.NOTION_DB_NOTES,
-  Reading: process.env.NOTION_DB_READING,
+  Content: process.env.NOTION_DB_CONTENT,
+  Library: process.env.NOTION_DB_LIBRARY,
 };
 
 let ok = true;

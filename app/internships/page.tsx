@@ -1,28 +1,28 @@
 import type { Metadata } from "next";
-import { getNotesByType, NOTE_TYPES } from "@/lib/notion";
+import { getInternships } from "@/lib/notion";
 import { Section } from "@/components/Section";
-import { NoteList } from "@/components/NoteList";
+import { EntryList } from "@/components/EntryList";
 import { Empty } from "@/components/Empty";
 
 export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Internships",
-  description: "Notes from the internships Dylan is working through now.",
+  description: "Notes from the internship work Dylan is going through now.",
 };
 
 export default async function InternshipsPage() {
-  const notes = await getNotesByType(NOTE_TYPES.internships);
+  const entries = await getInternships();
 
   return (
     <Section
       title="Internships"
-      description="Notes from the work I'm in the middle of right now."
+      description="Notes from the work I'm in the middle of right now — what I'm doing, learning, and shipping."
     >
-      {notes.length === 0 ? (
+      {entries.length === 0 ? (
         <Empty>Nothing published here yet.</Empty>
       ) : (
-        <NoteList notes={notes} />
+        <EntryList entries={entries} />
       )}
     </Section>
   );

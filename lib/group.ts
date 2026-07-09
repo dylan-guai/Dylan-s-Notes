@@ -1,16 +1,16 @@
-import type { Note } from "@/lib/notion";
+import type { Entry, Book } from "@/lib/notion";
 
 /**
- * Group notes by their Series, ordered within each series by Order (ascending,
- * nulls last) then newest first. Notes with no series fall under "Other".
+ * Group entries by Series, ordered within each series by Order (ascending,
+ * nulls last) then newest first. Entries with no series fall under "Other".
  */
-export function groupBySeries(notes: Note[]): [string, Note[]][] {
-  const groups = new Map<string, Note[]>();
-  for (const note of notes) {
-    const key = note.series ?? "Other";
+export function groupBySeries(entries: Entry[]): [string, Entry[]][] {
+  const groups = new Map<string, Entry[]>();
+  for (const entry of entries) {
+    const key = entry.series ?? "Other";
     const bucket = groups.get(key);
-    if (bucket) bucket.push(note);
-    else groups.set(key, [note]);
+    if (bucket) bucket.push(entry);
+    else groups.set(key, [entry]);
   }
   for (const bucket of groups.values()) {
     bucket.sort((a, b) => {
@@ -21,4 +21,23 @@ export function groupBySeries(notes: Note[]): [string, Note[]][] {
     });
   }
   return [...groups.entries()];
+}
+
+/**
+ * Group books by their first Domain (their "shelf"), alphabetically. Books with
+ * no domain fall under "Other" (sorted last).
+ */
+export function groupByDomain(books: Book[]): [string, Book[]][] {
+  const groups = new Map<string, Book[]>();
+  for (const book of books) {
+    const key = book.domain[0] ?? "Other";
+    const bucket = groups.get(key);
+    if (bucket) bucket.push(book);
+    else groups.set(key, [book]);
+  }
+  return [...groups.entries()].sort(([a], [b]) => {
+    if (a === "Other") return 1;
+    if (b === "Other") return -1;
+    return a.localeCompare(b);
+  });
 }
