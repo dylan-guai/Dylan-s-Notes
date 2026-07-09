@@ -11,6 +11,6 @@ const MONTHS = [
 export function formatDate(iso: string | null | undefined): string {
   if (!iso) return "";
   const [y, m, d] = iso.slice(0, 10).split("-").map(Number);
-  if (!y || !m || !d) return "";
+  if (!y || !m || !d || m < 1 || m > 12) return "";
   return `${MONTHS[m - 1]} ${d}, ${y}`;
 }

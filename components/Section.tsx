@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 export function Section({
   title,
   description,
@@ -5,7 +7,7 @@ export function Section({
 }: {
   title: string;
   description?: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <div className="space-y-12">
