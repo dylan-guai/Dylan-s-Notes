@@ -1,3 +1,5 @@
-export function Empty({ children }: { children: React.ReactNode }) {
+import type { ReactNode } from "react";
+
+export function Empty({ children }: { children: ReactNode }) {
   return <p className="text-muted">{children}</p>;
 }
